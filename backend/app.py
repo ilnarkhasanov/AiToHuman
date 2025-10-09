@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 
 from dtos.analyze import AnalyzeDTO
 from dtos.humanize import HumanizeDTO
@@ -22,3 +23,7 @@ def analyze(analyze_dto: AnalyzeDTO):
 )
 def humanize(humanize_dto: HumanizeDTO):
     raise NotImplementedError
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0")

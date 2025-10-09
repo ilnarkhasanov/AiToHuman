@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 
-from backend.dtos.analyze import AnalyzeDTO
-from backend.response_models.analyze import AnalyzeResponseModel
-from backend.response_models.humanize import HumanizeResponseModel
+from dtos.analyze import AnalyzeDTO
+from dtos.humanize import HumanizeDTO
+from response_models.analyze import AnalyzeResponseModel
+from response_models.humanize import HumanizeResponseModel
 
 app = FastAPI()
 
@@ -19,5 +20,5 @@ def analyze(analyze_dto: AnalyzeDTO):
     "/humanize",
     response_model=HumanizeResponseModel,
 )
-def humanize():
+def humanize(humanize_dto: HumanizeDTO):
     raise NotImplementedError

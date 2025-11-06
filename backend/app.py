@@ -3,7 +3,7 @@ import uvicorn
 
 from dtos.analyze import AnalyzeDTO
 from dtos.humanize import HumanizeDTO
-from response_models.analyze import AnalyzeResponseModel
+from response_models.analyze import AnalyzeResponseModel, TextChunkResponseModel
 from response_models.humanize import HumanizeResponseModel
 
 app = FastAPI()
@@ -14,7 +14,7 @@ app = FastAPI()
     response_model=AnalyzeResponseModel,
 )
 def analyze(analyze_dto: AnalyzeDTO):
-    raise NotImplementedError
+    return AnalyzeResponseModel(chunks=[TextChunkResponseModel(text="text", ai_generated=True)], ai_rate=50)
 
 
 @app.post(
@@ -22,7 +22,7 @@ def analyze(analyze_dto: AnalyzeDTO):
     response_model=HumanizeResponseModel,
 )
 def humanize(humanize_dto: HumanizeDTO):
-    raise NotImplementedError
+    return HumanizeResponseModel(previous_rate=90, new_rate=30, humanized_text="text")
 
 
 if __name__ == "__main__":

@@ -8,3 +8,4 @@ class TextChunkResponseModel(BaseModel):
 
 class AnalyzeResponseModel(BaseModel):
     chunks: list[TextChunkResponseModel]
+    ai_rate: int

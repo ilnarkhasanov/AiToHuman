@@ -14,12 +14,19 @@ const TextProcessor: React.FC<TextProcessorProps> = ({ status }) => {
   const isOverLimit = wordCount > MAX_WORDS;
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    console.log("Text changed:", e.target.value);
     let newText = e.target.value;
     let words = newText.split(/\s+/).filter(Boolean);
 
     setText(newText);
     setWordCount(words.length);
+  };
+
+  const handleAnalyze = () => {
+    setText("Analyzing...");
+  };
+
+  const handleHumanize = () => {
+    setText("Humanizing...");
   };
 
   return (
@@ -45,6 +52,32 @@ const TextProcessor: React.FC<TextProcessorProps> = ({ status }) => {
         }`}
       >
         {wordCount}/{MAX_WORDS} words
+      </div>
+      <div className="flex flex-col sm:flex-row gap-4 mt-4 justify-end">
+        <button
+          className="px-6 py-3 text-white font-medium rounded-sm bg-green-500 hover:bg-green-600 shadow-md hover:shadow-lg disabled:opacity-50 transition"
+          onClick={handleAnalyze}
+          disabled={isLoading || isOverLimit || !text.trim()}
+        >
+          {status === "loading-detect" ? (
+            <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+          ) : (
+            <></>
+          )}
+          {isLoading ? "Analyzing..." : "Analyze"}
+        </button>
+        <button
+          className="px-6 py-3 text-white font-medium rounded-sm bg-purple-600 hover:bg-purple-700 shadow-md hover:shadow-lg disabled:opacity-50 transition"
+          onClick={handleHumanize}
+          disabled={isLoading || isOverLimit || !text.trim()}
+        >
+          {status === "loading-humanize" ? (
+            <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+          ) : (
+            <></>
+          )}
+          {isLoading ? "Humanizing..." : "Humanize"}
+        </button>
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 services:
   backend:
     build: backend
+    environment:
+      - GIGACHAT_CREDENTIALS=${GIGACHAT_CREDENTIALS}
     ports:
       - 8001:8000
 

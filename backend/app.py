@@ -5,8 +5,11 @@ from dtos.analyze import AnalyzeDTO
 from dtos.humanize import HumanizeDTO
 from response_models.analyze import AnalyzeResponseModel, TextChunkResponseModel
 from response_models.humanize import HumanizeResponseModel
+from services.analyze_service import AnalyzeService
 
 app = FastAPI()
+
+analyze_service = AnalyzeService()
 
 
 @app.post(
@@ -14,7 +17,15 @@ app = FastAPI()
     response_model=AnalyzeResponseModel,
 )
 def analyze(analyze_dto: AnalyzeDTO):
-    return AnalyzeResponseModel(chunks=[TextChunkResponseModel(text="text", ai_generated=True)], ai_rate=50)
+    analyze_result = analyze_service.analyze(analyze_dto.text)
+
+    return AnalyzeResponseModel(
+        chunks=[
+            TextChunkResponseModel.from_domain(text_chunk)
+            for text_chunk in analyze_result.chunks
+        ],
+        ai_rate=analyze_result.ai_rate,
+    )
 
 
 @app.post(

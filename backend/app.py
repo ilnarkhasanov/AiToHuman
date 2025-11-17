@@ -7,6 +7,7 @@ from dtos.humanize import HumanizeDTO
 from response_models.analyze import AnalyzeResponseModel, TextChunkResponseModel
 from response_models.humanize import HumanizeResponseModel
 from services.analyze_service import AnalyzeService
+from services.humanize_service import HumanizeService
 
 app = FastAPI()
 
@@ -24,6 +25,7 @@ app.add_middleware(
 )
 
 analyze_service = AnalyzeService()
+humanize_service = HumanizeService()
 
 
 @app.post(
@@ -47,7 +49,12 @@ def analyze(analyze_dto: AnalyzeDTO):
     response_model=HumanizeResponseModel,
 )
 def humanize(humanize_dto: HumanizeDTO):
-    return HumanizeResponseModel(previous_rate=90, new_rate=30, humanized_text="text")
+    humanize_result = humanize_service.humanize(humanize_dto.text)
+    return HumanizeResponseModel(
+        previous_rate=humanize_result.previous_ai_rate,
+        new_rate=humanize_result.new_ai_rate,
+        humanized_text=humanize_result.fixed_text,
+    )
 
 
 if __name__ == "__main__":

@@ -23,7 +23,7 @@ class AnalyzeService:
             - "AI"     → likely written by an AI
             - "HUMAN"  → likely written by a person
             3. Send the AI rate of the text as an integer
-            3. Return ONLY a valid JSON. Format:
+            4. Return ONLY a valid JSON. Format:
 
             {
                 "ai_rate": <ai_rate>,

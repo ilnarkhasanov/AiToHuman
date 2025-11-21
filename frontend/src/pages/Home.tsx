@@ -13,12 +13,12 @@ import type {
 
 function Home() {
   const [status, setStatus] = useState<AppStatus>("idle");
-  const [inputText, setInputText] = useState(""); // Stores the text that was processed
+  const [inputText, setInputText] = useState("");
   const [analysisResult, setAnalysisResult] =
     useState<InternalAnalysisResult | null>(null);
   const [humanizerResult, setHumanizerResult] =
     useState<InternalHumanizerResult | null>(null);
-  const [error, setError] = useState<string | null>(null); // State for API errors
+  const [error, setError] = useState<string | null>(null);
 
   const handleError = (err: any, defaultMessage: string) => {
     const errorMsg = extractErrorMessage(err, defaultMessage);
@@ -34,7 +34,7 @@ function Home() {
     setError(null);
 
     try {
-      // Trim text to MAX_WORDS before sending
+      // TODO: Remove trimming, inputted text is already limited
       const words = text.split(/\s+/).filter(Boolean);
       const trimmedText = words.slice(0, 500).join(" ");
 
@@ -46,7 +46,6 @@ function Home() {
       });
       setStatus("show-detect");
     } catch (err: any) {
-      // Handle errors from the API call
       handleError(err, "Failed to analyze text.");
     }
   }, []);
@@ -59,7 +58,7 @@ function Home() {
     setError(null); // Clear previous errors
 
     try {
-      // Trim text to MAX_WORDS before sending
+      // TODO: Remove trimming, inputted text is already limited
       const words = text.split(/\s+/).filter(Boolean);
       const trimmedText = words.slice(0, 500).join(" ");
 

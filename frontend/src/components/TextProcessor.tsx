@@ -81,7 +81,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
         onChange={handleTextChange}
         disabled={isLoading}
       />
-      {/* Conditional class for word count color */}
+      {/* Word count */}
       <div
         className={`text-right text-sm mt-2 ${isOverLimit ? "text-red-600" : "text-gray-500"
           }`}
@@ -101,7 +101,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
           onClick={handleAnalyzeClick}
           // Disable button if over limit or empty
           disabled={isLoading || !text.trim() || isOverLimit}
-          className="bg-green-500 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
+          className="bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
         >
           {status === "loading-detect" ? (
             <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
@@ -114,7 +114,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
           onClick={handleHumanizeClick}
           // Disable button if over limit or empty
           disabled={isLoading || !text.trim() || isOverLimit}
-          className="bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
+          className="bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
         >
           {status === "loading-humanize" ? (
             <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>

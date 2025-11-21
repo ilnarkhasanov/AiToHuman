@@ -29,7 +29,7 @@ export const extractErrorMessage = (err: any, defaultMessage: string): string =>
       }
     } else if (err.request) {
       // Network error (no response received)
-      errorMsg = `Network Error: Could not connect to the backend server at ${API_BASE_URL}. Check if the server is running.`;
+      errorMsg = `Network Error: Could not connect to the server at ${API_BASE_URL}.`;
     } else {
       
       errorMsg = err.message;

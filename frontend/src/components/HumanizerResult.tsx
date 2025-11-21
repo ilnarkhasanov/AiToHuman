@@ -13,7 +13,6 @@ const HumanizerResult: React.FC<HumanizerResultProps> = ({
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
-        // This uses a fallback for secure (iframe) contexts
         try {
             const ta = document.createElement("textarea");
             ta.value = result.humanizedText;

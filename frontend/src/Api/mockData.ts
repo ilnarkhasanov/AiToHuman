@@ -1,9 +1,30 @@
 import type { ApiAnalysisResult, ApiHumanizerResult } from "../types/Types";
 
 // --- MOCK API DATA ---
-export const MOCK_ANALYSIS_RESULT: ApiAnalysisResult = {
+const MOCK_ANALYSIS_RESULT: ApiAnalysisResult = {
   ai_rate: 92,
-  chunks: [], // Chunks are not used now
+  chunks: [
+    {
+      text: "The vast majority of scientific consensus indicates that global climate change is a direct result of anthropogenic activities. ",
+      ai_generated: true,
+    },
+    {
+      text: "We're talking about burning fossil fuels, deforestation, and industrial processes that release greenhouse gases like carbon dioxide and methane. ",
+      ai_generated: false,
+    },
+    {
+      text: "These gases trap heat in the atmosphere, leading to rising global temperatures, which has significant consequences for ecosystems and human civilization. ",
+      ai_generated: true,
+    },
+    {
+      text: "It's a serious problem, and we need to figure out solutions fast. ",
+      ai_generated: true,
+    },
+    {
+      text: "After that, we can try to find more effieicte solutions.",
+      ai_generated: false,
+    },
+  ],
 };
 
 export const MOCK_HUMANIZER_RESULT: ApiHumanizerResult = {
@@ -39,4 +60,3 @@ export const mockHumanizeText = (text: string): Promise<ApiHumanizerResult> => {
     }, 2000); // 2 second delay
   });
 };
-

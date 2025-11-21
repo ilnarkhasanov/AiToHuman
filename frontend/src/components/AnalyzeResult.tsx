@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { ArrowPathIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import type { InternalAnalysisResult } from "../types/Types";
 
@@ -17,19 +17,30 @@ const AnalyzeResult: React.FC<AnalyzeResultProps> = ({
     onAnalyzeNew,
     onHumanizeExisting,
 }) => {
-    // We re-trim the text to show exactly what was processed
-    const processedText = useMemo(() => {
-        const words = text.split(/\s+/).filter(Boolean).slice(0, MAX_WORDS);
-        return words.join(" ");
-    }, [text]);
 
     return (
         <div>
             <label className="text-sm font-medium text-gray-700">
                 Your Text
             </label>
-            <div className="mt-2 w-full h-64 p-4 border border-gray-200 rounded-md bg-gray-50 overflow-y-auto whitespace-pre-wrap leading-relaxed">
-                {processedText}
+            {/* highlighting chunks */}
+            <div className="mt-2 w-full h-64 p-4 border border-gray-200 rounded-md bg-gray-50 overflow-y-auto whitespace-pre-wrap leading-relaxed cursor-default">
+                {result.chunks && result.chunks.length > 0 ? (
+                    result.chunks.map((chunk, index) => (
+                        <span
+                            key={index}
+                            className={chunk.ai_generated ? 'bg-red-200 rounded-sm px-0.5' : ''}
+                            title={chunk.ai_generated ? 'Detected as AI-Generated' : 'Human-Written'}
+                        >
+                            {chunk.text}
+                        </span>
+                    ))
+                ) : (
+                    // Fallback if no chunks are provided by the API
+                    <p className="text-gray-600">
+                        {text.split(/\s+/).filter(Boolean).slice(0, MAX_WORDS).join(' ')}
+                    </p>
+                )}
             </div>
 
             <div className="text-center mt-8">

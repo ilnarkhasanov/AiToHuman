@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowRightIcon, ClipboardDocumentIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import type { InternalHumanizerResult } from "../types/Types";
 import { MdCopyAll } from "react-icons/md";
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ArrowRightIcon, ClipboardDocumentIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import type { InternalHumanizerResult } from "../types/Types";
 import { MdCopyAll } from "react-icons/md";
 
@@ -38,20 +39,7 @@ const HumanizerResult: React.FC<HumanizerResultProps> = ({
                     </div>
 
                     {/* Arrow */}
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#9CA3AF"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <path d="M5 12h14" />
-                        <path d="m12 5 7 7-7 7" />
-                    </svg>
+                    <ArrowRightIcon className="w-8 h-8 text-gray-400" />
 
                     {/* Now */}
                     <div className="text-center">
@@ -93,6 +81,7 @@ const HumanizerResult: React.FC<HumanizerResultProps> = ({
                     onClick={onHumanizeNew}
                     className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-lg flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
                 >
+                    <SparklesIcon className="w-5 h-5" />
                     Humanize New Text
                 </button>
             </div>

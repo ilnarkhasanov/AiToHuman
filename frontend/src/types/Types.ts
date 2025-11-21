@@ -5,12 +5,14 @@ export type AppStatus =
   | "show-detect"
   | "show-humanize";
 
+interface TextChunk {
+  text: string;
+  ai_generated: boolean;
+}
+
 export interface ApiAnalysisResult {
   ai_rate: number;
-  chunks: {
-    text: string;
-    ai_generated: boolean;
-  }[];
+  chunks: TextChunk[];
 }
 
 export interface ApiHumanizerResult {
@@ -21,6 +23,7 @@ export interface ApiHumanizerResult {
 
 export interface InternalAnalysisResult {
   score: number;
+  chunks: TextChunk[];
 }
 
 export interface InternalHumanizerResult {

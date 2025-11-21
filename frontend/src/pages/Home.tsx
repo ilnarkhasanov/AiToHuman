@@ -34,15 +34,12 @@ function Home() {
     setError(null);
 
     try {
-      // TODO: Remove trimming, inputted text is already limited
-      const words = text.split(/\s+/).filter(Boolean);
-      const trimmedText = words.slice(0, 500).join(" ");
-
-      const result: ApiAnalysisResult = await analyzeText(trimmedText);
+      const result: ApiAnalysisResult = await analyzeText(text);
 
       // Map API response to internal state
       setAnalysisResult({
         score: result.ai_rate,
+        chunks: result.chunks,
       });
       setStatus("show-detect");
     } catch (err: any) {
@@ -78,7 +75,6 @@ function Home() {
 
   // Handler to humanize text that has already been analyzed
   const handleHumanizeFromAnalysis = useCallback(() => {
-
     if (inputText) {
       handleHumanize(inputText);
     }
@@ -93,7 +89,7 @@ function Home() {
   }, []);
 
   return (
-    <div id="page-background" className="bg-gray-100">
+    <div id="page-background" className="bg-[#f6f8f7]">
       <main className="w-full max-w-3xl mx-auto min-h-screen">
         <h1 className="text-center text-3xl sm:text-4xl text-gray-800 pt-6 pb-4 font-lato font-extrabold">
           Detect and Humanize AI Text

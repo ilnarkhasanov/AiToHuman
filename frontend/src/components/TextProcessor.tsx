@@ -3,7 +3,7 @@ import { MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import type {
   AppStatus,
   InternalAnalysisResult,
-  InternalHumanizerResult
+  InternalHumanizerResult,
 } from "../types/Types";
 import AnalyzeResult from "./AnalyzeResult";
 import HumanizerResult from "./HumanizerResult";
@@ -39,14 +39,12 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
   const isLoading =
     status === "loading-detect" || status === "loading-humanize";
 
-
   const isOverLimit = wordCount > MAX_WORDS;
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
 
     const words = newText.split(/\s+/).filter(Boolean);
-
 
     setWordCount(words.length);
     setText(newText);
@@ -70,9 +68,10 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
         id="text-input"
         className={`
           mt-2 w-full h-64 p-4 border rounded-md transition focus:outline-none
-          ${isOverLimit
-            ? "border-red-500 focus:ring-2 focus:ring-red-300"
-            : "border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+          ${
+            isOverLimit
+              ? "border-red-500 focus:ring-2 focus:ring-red-300"
+              : "border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent"
           }
           ${error ? "border-red-500" : ""}
         `}
@@ -83,8 +82,9 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
       />
       {/* Word count */}
       <div
-        className={`text-right text-sm mt-2 ${isOverLimit ? "text-red-600" : "text-gray-500"
-          }`}
+        className={`text-right text-sm mt-2 ${
+          isOverLimit ? "text-red-600" : "text-gray-500"
+        }`}
       >
         {wordCount}/{MAX_WORDS} words
       </div>
@@ -159,11 +159,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
     }
   };
 
-  return (
-    <div>
-      {renderContent()}
-    </div>
-  );
+  return <div>{renderContent()}</div>;
 };
 
 export default TextProcessor;

@@ -3,7 +3,8 @@ import type { ApiHumanizerResult } from "../types/Types";
 import { USE_MOCK_API } from "./MockConfig";
 import { mockHumanizeText } from "./mockData";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8001";
 
 /**
  * Calls the backend /humanize endpoint (or mock).

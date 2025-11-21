@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import type { InternalHumanizerResult } from "../types/Types";
+import { MdCopyAll } from "react-icons/md";
 
 interface HumanizerResultProps {
     result: InternalHumanizerResult;
@@ -12,17 +13,9 @@ const HumanizerResult: React.FC<HumanizerResultProps> = ({
 }) => {
     const [copied, setCopied] = useState(false);
 
-    const handleCopy = () => {
+    const handleCopy = async () => {
         try {
-            const ta = document.createElement("textarea");
-            ta.value = result.humanizedText;
-            ta.style.position = "absolute";
-            ta.style.left = "-9999px";
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand("copy");
-            document.body.removeChild(ta);
-
+            await navigator.clipboard.writeText(result.humanizedText);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
@@ -77,15 +70,18 @@ const HumanizerResult: React.FC<HumanizerResultProps> = ({
                     <h3 className="text-lg font-semibold text-gray-800">
                         Humanized Text
                     </h3>
-                    <button
-                        onClick={handleCopy}
-                        className={`text-sm font-medium flex items-center gap-1.5 transition-colors ${copied
-                            ? "text-green-600"
-                            : "text-purple-600 hover:text-purple-800"
-                            }`}
-                    >
-                        {copied ? "Copied!" : "Copy Text"}
-                    </button>
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
+                        <button
+                            onClick={handleCopy}
+                            className={`text-sm font-medium flex items-center gap-1.5 transition-colors ${copied
+                                ? "text-green-600"
+                                : "text-purple-600 hover:text-purple-800"
+                                }`}
+                        >
+                            <MdCopyAll className="text-current transition-colors" />
+                            {copied ? "Copied!" : "Copy Text"}
+                        </button>
+                    </div>
                 </div>
                 <div className="w-full h-64 p-4 border border-gray-200 rounded-md bg-gray-50 overflow-y-auto whitespace-pre-wrap leading-relaxed">
                     {result.humanizedText}

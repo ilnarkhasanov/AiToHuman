@@ -11,7 +11,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000
  * @returns A user-friendly error message string
  */
 export const extractErrorMessage = (err: any, defaultMessage: string): string => {
-  let errorMsg = defaultMessage;
+  let errorMsg: string;
   
   if (isAxiosError(err)) {
     if (err.response) {
@@ -21,7 +21,6 @@ export const extractErrorMessage = (err: any, defaultMessage: string): string =>
           err.response.data.detail[0]?.msg ||
           "Validation Error: Please check your input.";
       } else {
-        // Other HTTP errors (500, 404, etc.)
         errorMsg =
           err.response.data?.detail ||
           err.response.data?.message ||
@@ -35,7 +34,6 @@ export const extractErrorMessage = (err: any, defaultMessage: string): string =>
       errorMsg = err.message;
     }
   } else {
-    
     errorMsg = err.message || defaultMessage;
   }
   

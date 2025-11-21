@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import type {
   AppStatus,
   InternalAnalysisResult,
@@ -104,7 +105,9 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
         >
           {status === "loading-detect" ? (
             <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
-          ) : null}
+          ) : (
+            <MagnifyingGlassIcon className="w-5 h-5" />
+          )}
           {status === "loading-detect" ? "Analyzing..." : "Analyze"}
         </button>
         <button
@@ -115,7 +118,9 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
         >
           {status === "loading-humanize" ? (
             <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
-          ) : null}
+          ) : (
+            <SparklesIcon className="w-5 h-5" />
+          )}
           {status === "loading-humanize" ? "Humanizing..." : "Humanize"}
         </button>
       </div>

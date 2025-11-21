@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { ArrowPathIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import type { InternalAnalysisResult } from "../types/Types";
 
 const MAX_WORDS = 500;
@@ -44,12 +45,14 @@ const AnalyzeResult: React.FC<AnalyzeResultProps> = ({
                     onClick={onAnalyzeNew}
                     className="bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
                 >
+                    <ArrowPathIcon className="w-5 h-5" />
                     Analyze New Text
                 </button>
                 <button
                     onClick={onHumanizeExisting}
                     className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-lg flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
                 >
+                    <SparklesIcon className="w-5 h-5" />
                     Humanize Text
                 </button>
             </div>

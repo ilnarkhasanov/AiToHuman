@@ -13,7 +13,6 @@ COPY entities /application/entities
 COPY llm_agent /application/llm_agent
 COPY models /application/models
 COPY response_models /application/response_models
-COPY restrictions /application/restrictions
 COPY services /application/services
 
 CMD ["uv", "run", "app.py"]

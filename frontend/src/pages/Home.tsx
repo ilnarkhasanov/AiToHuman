@@ -55,11 +55,7 @@ function Home() {
     setError(null); // Clear previous errors
 
     try {
-      // TODO: Remove trimming, inputted text is already limited
-      const words = text.split(/\s+/).filter(Boolean);
-      const trimmedText = words.slice(0, 500).join(" ");
-
-      const result: ApiHumanizerResult = await humanizeText(trimmedText);
+      const result: ApiHumanizerResult = await humanizeText(text);
 
       // Map api response to internal state
       setHumanizerResult({

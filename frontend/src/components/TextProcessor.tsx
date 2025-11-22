@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import type {
   AppStatus,
@@ -10,6 +10,7 @@ import HumanizerResult from "./HumanizerResult";
 import FileUpload from "./FileUpload";
 
 const MAX_WORDS = 500;
+const LOCAL_STORAGE_KEY = "aitext_input_text";
 
 interface TextProcessorProps {
   status: AppStatus;
@@ -34,8 +35,41 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
   inputText,
   error,
 }) => {
-  const [text, setText] = useState("");
-  const [wordCount, setWordCount] = useState(0);
+  // Load text from localStorage on mount
+  const [text, setText] = useState(() => {
+    try {
+      const savedText = localStorage.getItem(LOCAL_STORAGE_KEY);
+      return savedText || "";
+    } catch {
+      return "";
+    }
+  });
+
+  const [wordCount, setWordCount] = useState(() => {
+    try {
+      const savedText = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (savedText) {
+        const words = savedText.split(/\s+/).filter(Boolean);
+        return words.length;
+      }
+      return 0;
+    } catch {
+      return 0;
+    }
+  });
+
+  // Save text to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      if (text) {
+        localStorage.setItem(LOCAL_STORAGE_KEY, text);
+      } else {
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+      }
+    } catch (error) {
+      console.warn("Failed to save text to localStorage:", error);
+    }
+  }, [text]);
 
   const isLoading =
     status === "loading-detect" || status === "loading-humanize";
@@ -65,7 +99,20 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
     setWordCount(words.length);
   };
 
-  // Renders the main input area
+  const HandleReset = () => {
+    try {
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+    } catch (error) {
+      console.warn("Failed to clear localStorage:", error);
+    }
+
+    // Clears old text after processing
+    // setText("");
+    // setWordCount(0);
+
+    onReset();
+  };
+
   const renderIdleState = () => (
     <div>
       <div className="flex justify-between items-center">
@@ -153,7 +200,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
             <AnalyzeResult
               text={inputText}
               result={analysisResult}
-              onAnalyzeNew={onReset}
+              onAnalyzeNew={HandleReset}
               onHumanizeExisting={onHumanizeFromAnalysis}
             />
           );
@@ -163,7 +210,10 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
       case "show-humanize":
         if (humanizerResult) {
           return (
-            <HumanizerResult result={humanizerResult} onHumanizeNew={onReset} />
+            <HumanizerResult
+              result={humanizerResult}
+              onHumanizeNew={HandleReset}
+            />
           );
         }
         return renderIdleState(); // Fallback

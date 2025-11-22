@@ -43,7 +43,7 @@ export const mockAnalyzeText = (text: string): Promise<ApiAnalysisResult> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(MOCK_ANALYSIS_RESULT);
-    }, 1500); // 1.5 second delay
+    }, 1000);
   });
 };
 
@@ -57,6 +57,6 @@ export const mockHumanizeText = (text: string): Promise<ApiHumanizerResult> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(MOCK_HUMANIZER_RESULT);
-    }, 2000); // 2 second delay
+    }, 1000);
   });
 };

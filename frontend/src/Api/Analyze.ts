@@ -3,7 +3,8 @@ import type { ApiAnalysisResult } from "../types/Types";
 import { USE_MOCK_API } from "./MockConfig";
 import { mockAnalyzeText } from "./mockData";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8001";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8001";
 
 /**
  * Calls the backend /analyze endpoint (or mock).

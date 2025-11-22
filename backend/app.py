@@ -4,10 +4,13 @@ import uvicorn
 
 from dtos.analyze import AnalyzeDTO
 from dtos.humanize import HumanizeDTO
+from dtos.ocr import OCRDTO
 from response_models.analyze import AnalyzeResponseModel, TextChunkResponseModel
 from response_models.humanize import HumanizeResponseModel
+from response_models.ocr import OCRResponseModel
 from services.analyze_service import AnalyzeService
 from services.humanize_service import HumanizeService
+from services.ocr_service import OCRService
 
 app = FastAPI()
 
@@ -26,6 +29,7 @@ app.add_middleware(
 
 analyze_service = AnalyzeService()
 humanize_service = HumanizeService()
+ocr_service = OCRService()
 
 
 @app.post(
@@ -54,6 +58,16 @@ def humanize(humanize_dto: HumanizeDTO):
         previous_rate=humanize_result.previous_ai_rate,
         new_rate=humanize_result.new_ai_rate,
         humanized_text=humanize_result.fixed_text,
+    )
+
+@app.post(
+    "/ocr",
+    response_model=OCRResponseModel,
+)
+def ocr(ocr_dto: OCRDTO):
+    ocr_result = ocr_service.ocr_space_file(ocr_dto.image.filename)
+    return OCRResponseModel(
+        text=ocr_result.text,
     )
 
 

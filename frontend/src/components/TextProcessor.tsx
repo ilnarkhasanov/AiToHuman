@@ -58,6 +58,8 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
     }
   });
 
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+
   // Save text to localStorage whenever it changes
   useEffect(() => {
     try {
@@ -115,40 +117,59 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
 
   const renderIdleState = () => (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex gap-4 items-start justify-center">
         <label
           htmlFor="text-input"
-          className="text-sm font-medium text-gray-700"
+          className="text-lg font-medium text-gray-700 py-2"
         >
-          Your Text
+          Type Your Text or
         </label>
         <FileUpload
           onTextExtracted={handleFileExtracted}
+          onFileNameChange={setUploadedFileName}
           maxSizeMB={2}
           disabled={isLoading}
         />
       </div>
-      <textarea
-        id="text-input"
-        className={`
-          mt-2 w-full h-64 p-4 border rounded-md transition focus:outline-none
-          ${
-            isOverLimit
+      <div className="relative">
+        {uploadedFileName && (
+          <div className="absolute -top-7 left-0 z-10 inline-flex items-center gap-2 bg-green-100 text-green-700 text-xs font-semibold py-1.5 px-3 rounded-lg">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{uploadedFileName}</span>
+          </div>
+        )}
+        <textarea
+          id="text-input"
+          className={`
+          mt-2 w-full h-64 p-4 border rounded-md transition focus:outline-none bg-gray-50
+          ${isOverLimit
               ? "border-red-500 focus:ring-2 focus:ring-red-300"
               : "border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent"
-          }
+            }
           ${error ? "border-red-500" : ""}
         `}
-        placeholder={`Enter text here (up to ${MAX_WORDS} words)...`}
-        value={text}
-        onChange={handleTextChange}
-        disabled={isLoading}
-      />
+          placeholder={`Enter text here (up to ${MAX_WORDS} words)...`}
+          value={text}
+          onChange={handleTextChange}
+          disabled={isLoading}
+        />
+      </div>
       {/* Word count */}
       <div
-        className={`text-right text-sm mt-2 ${
-          isOverLimit ? "text-red-600" : "text-gray-500"
-        }`}
+        className={`text-right text-sm mt-2 ${isOverLimit ? "text-red-600" : "text-gray-500"
+          }`}
       >
         {wordCount}/{MAX_WORDS} words
       </div>

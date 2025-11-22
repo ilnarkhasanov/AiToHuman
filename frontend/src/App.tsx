@@ -6,9 +6,13 @@ import Footer from "./components/Footer";
 function App() {
   return (
     <BrowserRouter>
-      <Header />
-      <Router />
-      <Footer />
+      <div className="bg-linear-to-b from-purple-200 to-white min-h-screen">
+        <Header />
+        <div className="mx-4 rounded-2xl bg-white">
+          <Router />
+        </div>
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 }

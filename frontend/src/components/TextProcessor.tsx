@@ -7,6 +7,7 @@ import type {
 } from "../types/Types";
 import AnalyzeResult from "./AnalyzeResult";
 import HumanizerResult from "./HumanizerResult";
+import FileUpload from "./FileUpload";
 
 const MAX_WORDS = 500;
 
@@ -58,12 +59,28 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
     onHumanize(text);
   };
 
+  const handleFileExtracted = (fileText: string) => {
+    setText(fileText);
+    const words = fileText.split(/\s+/).filter(Boolean);
+    setWordCount(words.length);
+  };
+
   // Renders the main input area
   const renderIdleState = () => (
     <div>
-      <label htmlFor="text-input" className="text-sm font-medium text-gray-700">
-        Your Text
-      </label>
+      <div className="flex justify-between items-center">
+        <label
+          htmlFor="text-input"
+          className="text-sm font-medium text-gray-700"
+        >
+          Your Text
+        </label>
+        <FileUpload
+          onTextExtracted={handleFileExtracted}
+          maxSizeMB={2}
+          disabled={isLoading}
+        />
+      </div>
       <textarea
         id="text-input"
         className={`

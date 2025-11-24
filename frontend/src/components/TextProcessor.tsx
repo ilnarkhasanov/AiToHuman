@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, SparklesIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import type {
   AppStatus,
   InternalAnalysisResult,
@@ -132,24 +132,6 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
         />
       </div>
       <div className="relative">
-        {uploadedFileName && (
-          <div className="absolute -top-7 left-0 z-10 inline-flex items-center gap-2 bg-green-100 text-green-700 text-xs font-semibold py-1.5 px-3 rounded-lg">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{uploadedFileName}</span>
-          </div>
-        )}
         <textarea
           id="text-input"
           className={`
@@ -166,13 +148,28 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
           disabled={isLoading}
         />
       </div>
-      {/* Word count */}
-      <div
-        className={`text-right text-sm mt-2 ${isOverLimit ? "text-red-600" : "text-gray-500"
-          }`}
-      >
-        {wordCount}/{MAX_WORDS} words
+
+      <div className="flex flex-row justify-between mt-2 items-center gap-2">
+        {uploadedFileName && (
+
+          <div className="min-w-0 flex flex-row items-center gap-2 bg-green-100 text-green-700 text-xs font-semibold py-1.5 px-3 rounded-lg">
+            <InformationCircleIcon className="min-w-4 w-4 h-4" />
+            <span className="truncate" title={uploadedFileName}>
+              {uploadedFileName}
+            </span>
+          </div>
+
+        )}
+        <div className="grow" />
+        <div
+          className={`shrink-0 text-sm ${isOverLimit ? "text-red-600" : "text-gray-500"}`}
+        >
+          {wordCount}/{MAX_WORDS} words
+        </div>
       </div>
+
+
+
 
       {/* Display API Error Message */}
       {error && (

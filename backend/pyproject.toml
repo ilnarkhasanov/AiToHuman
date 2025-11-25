@@ -13,4 +13,5 @@ dependencies = [
     "uvicorn>=0.37.0",
     "requests>=2.31.0",
     "python-multipart>=0.0.20",
+    "redis>=7.1.0",
 ]

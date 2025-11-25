@@ -3,6 +3,7 @@ from typing import Never
 from entities.humanize_result import HumanizeResult
 from llm_agent.llm_agent import LLMAgent
 from models.gigachat.gigachat import llm
+from redis_client.client import redis_client
 
 
 class HumanizeService:
@@ -47,13 +48,25 @@ class HumanizeService:
         )
 
     def humanize(self, text: str) -> HumanizeResult:
+        maybe_value: bytes | None = redis_client.get(text)  # type: ignore
+
+        previous_ai_rate = -1
+        if maybe_value is not None:
+            analyze_raw_result = maybe_value.decode("utf-8")
+            analyze_json_result = json.loads(analyze_raw_result)
+            previous_ai_rate = analyze_json_result["ai_rate"]
+
         system_prompt = self._get_system_prompt()
         prompt = self._prepare_prompt(text)
         raw_result = self.agent.invoke(system_prompt, prompt)
+
         json_result = json.loads(raw_result)
 
+        if previous_ai_rate == -1:
+            previous_ai_rate = json_result["previous_ai_rate"]
+
         return HumanizeResult(
-            previous_ai_rate=json_result["previous_ai_rate"],
+            previous_ai_rate=previous_ai_rate,
             fixed_text=json_result["fixed_text"],
             new_ai_rate=json_result["new_ai_rate"],
         )

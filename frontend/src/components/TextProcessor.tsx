@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   MagnifyingGlassIcon,
   SparklesIcon,
-  InformationCircleIcon,
+  DocumentIcon,
 } from "@heroicons/react/24/outline";
 import type {
   AppStatus,
@@ -162,7 +162,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
       <div className="flex flex-row justify-between mt-2 items-center gap-2">
         {uploadedFileName && (
           <div className="min-w-0 flex flex-row items-center gap-2 bg-green-100 text-green-700 text-xs font-semibold py-1.5 px-3 rounded-lg">
-            <InformationCircleIcon className="min-w-4 w-4 h-4" />
+            <DocumentIcon className="min-w-4 w-4 h-4" />
             <span className="truncate" title={uploadedFileName}>
               {uploadedFileName}
             </span>
@@ -227,6 +227,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
               result={analysisResult}
               onAnalyzeNew={HandleReset}
               onHumanizeExisting={onHumanizeFromAnalysis}
+              onReturnHome={HandleReset}
             />
           );
         }
@@ -238,6 +239,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
             <HumanizerResult
               result={humanizerResult}
               onHumanizeNew={HandleReset}
+              onReturnHome={HandleReset}
             />
           );
         }

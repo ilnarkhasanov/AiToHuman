@@ -93,7 +93,7 @@ function Home() {
         Paste your text below to analyze for AI-generated content<br />and
         transform it to a human-like style.
       </p>
-      <div className="bg-gray-100 rounded-2xl p-8 shadow-xl/20">
+      <div className="bg-gray-100 rounded-2xl px-8 pb-8 pt-5 shadow-xl/20">
         <TextProcessor
           status={status}
           onAnalyze={handleAnalyze}

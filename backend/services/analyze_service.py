@@ -12,21 +12,15 @@ class AnalyzeService:
             tools=[],
         )
 
-<<<<<<< HEAD
-    def prepare_prompt(self, text: str) -> str:
-        return (
-            """
-=======
     def get_system_prompt(self) -> str:
         return """
->>>>>>> Add system prompt (#27)
             You are an advanced AI-text detector.
             
             TASK:
             1. Split the input text into meaningful segments (usually sentences or short paragraphs).
             2. For EACH segment classify it as:
-            - "AI"     → likely written by an AI
-            - "HUMAN"  → likely written by a person
+            - "AI"     : likely written by an AI
+            - "HUMAN"  : likely written by a person
             3. Send the AI rate of the text as an integer
             4. Return ONLY a valid JSON. Format:
 

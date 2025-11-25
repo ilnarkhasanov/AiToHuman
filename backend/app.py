@@ -11,6 +11,7 @@ from response_models.ocr import OCRResponseModel
 from services.analyze_service import AnalyzeService
 from services.humanize_service import HumanizeService
 from services.ocr_service import OCRService
+from models.gigachat.gigachat import llm
 from pathlib import Path
 from dotenv import load_dotenv
 import os
@@ -38,10 +39,6 @@ app.add_middleware(
 )
 
 
-analyze_service = AnalyzeService()
-humanize_service = HumanizeService()
-ocr_service = OCRService()
-from models.gigachat.gigachat import llm
 agent = LLMAgent(
     llm,
     tools=[],

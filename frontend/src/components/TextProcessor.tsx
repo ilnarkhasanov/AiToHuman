@@ -99,6 +99,27 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
     onHumanize(text);
   };
 
+  const handleFileExtracted = (fileText: string) => {
+    setText(fileText);
+    const words = fileText.split(/\s+/).filter(Boolean);
+    setWordCount(words.length);
+  };
+
+  const HandleReset = () => {
+    try {
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+    } catch (error) {
+      console.warn("Failed to clear localStorage:", error);
+    }
+
+    // Clears old text after processing
+    setText("");
+    setWordCount(0);
+    setUploadedFileName("");
+
+    onReset();
+  };
+
   // Renders the main input area
   const renderIdleState = () => (
     <div>

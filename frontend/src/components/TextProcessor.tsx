@@ -109,8 +109,8 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
     }
 
     // Clears old text after processing
-    // setText("");
-    // setWordCount(0);
+    setText("");
+    setWordCount(0);
 
     onReset();
   };

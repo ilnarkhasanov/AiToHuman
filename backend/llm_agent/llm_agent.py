@@ -3,8 +3,8 @@ from uuid import uuid4
 from langchain_core.language_models import LanguageModelLike
 from langchain_core.tools import BaseTool
 from langgraph.prebuilt import create_react_agent
-from langgraph.checkpoint.memory import InMemorySaver
 from langchain_core.runnables import RunnableConfig
+import gigachat.exceptions
 
 
 class LLMAgent:
@@ -13,21 +13,31 @@ class LLMAgent:
         self.agent = create_react_agent(
             model,
             tools,
-            checkpointer=InMemorySaver(),
         )
+        self.thread_id = uuid4().hex
         self.config: RunnableConfig = {
-                "configurable": {"thread_id": uuid4().hex}}
+                "configurable": {"thread_id": self.thread_id}}
     
-    def invoke(self, content: str, temperature: float=0.1) -> str:
-        message = {
-            "role": "user",
-            "content": content,
-        }
-
+    def _invoke(self, messages: list[dict[str, str]], temperature: float=0.3) -> str:
         return self.agent.invoke(
             {
-                "messages": [message],
+                "messages": messages,
                 "temperature": temperature,
             },
             config=self.config,
         )["messages"][-1].content
+    
+    def invoke(self, system_prompt: str, content: str, temperature: float=0.3) -> str:
+        try:
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": content},
+            ]
+
+            return self._invoke(messages)
+        except gigachat.exceptions.ResponseError:
+            messages = [
+                {"role": "user", "content": content},
+            ]
+
+            return self._invoke(messages)

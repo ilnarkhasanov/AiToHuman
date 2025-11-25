@@ -55,7 +55,7 @@ const HumanizerResult: React.FC<HumanizerResultProps> = ({
       {/* Humanized Text Card */}
       <div className="bg-white rounded-lg shadow-md p-6 mt-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-800">
+          <h3 className="text-base font-semibold text-gray-800">
             Humanized Text
           </h3>
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
@@ -72,7 +72,7 @@ const HumanizerResult: React.FC<HumanizerResultProps> = ({
             </button>
           </div>
         </div>
-        <div className="w-full h-64 p-4 border border-gray-200 rounded-md bg-gray-50 overflow-y-auto whitespace-pre-wrap leading-relaxed">
+        <div className="w-full h-56 p-4 border border-gray-200 rounded-md bg-gray-50 overflow-y-auto whitespace-pre-wrap leading-relaxed">
           {result.humanizedText}
         </div>
       </div>

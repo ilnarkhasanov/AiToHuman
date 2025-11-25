@@ -3,6 +3,7 @@ services:
     build: backend
     environment:
       - GIGACHAT_CREDENTIALS=${GIGACHAT_CREDENTIALS}
+      - OCR_API_KEY=${OCR_API_KEY}
     ports:
       - 8001:8000
 

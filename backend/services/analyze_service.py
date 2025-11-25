@@ -1,7 +1,7 @@
 import json
 from entities.analyze_result import AnalyzeResult
 from entities.text_chunk import TextChunk
-
+from models.gigachat.gigachat import llm
 from llm_agent.llm_agent import LLMAgent
 
 
@@ -16,8 +16,8 @@ class AnalyzeService:
             TASK:
             1. Split the input text into meaningful segments (usually sentences or short paragraphs).
             2. For EACH segment classify it as:
-            - "AI"     → likely written by an AI
-            - "HUMAN"  → likely written by a person
+            - "AI"     : likely written by an AI
+            - "HUMAN"  : likely written by a person
             3. Send the AI rate of the text as an integer
             4. Memorize the result for the given text. When asked again, return the same result.
             5. Return ONLY a valid JSON. Format:
@@ -64,9 +64,7 @@ class AnalyzeService:
             result.chunks.append(
                 TextChunk(
                     text=json_chunk["text"],
-                    ai_generated=(
-                        True if json_chunk["label"] == "AI" else False
-                    )
+                    ai_generated=(True if json_chunk["label"] == "AI" else False),
                 )
             )
 

@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
@@ -7,8 +7,20 @@ from dtos.humanize import HumanizeDTO
 from llm_agent.llm_agent import LLMAgent
 from response_models.analyze import AnalyzeResponseModel, TextChunkResponseModel
 from response_models.humanize import HumanizeResponseModel
+from response_models.ocr import OCRResponseModel
 from services.analyze_service import AnalyzeService
 from services.humanize_service import HumanizeService
+from services.ocr_service import OCRService
+from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+env_path = Path(__file__).parent / ".env"
+load_dotenv(dotenv_path=env_path)
+
+OCR_API_KEY = os.getenv("OCR_API_KEY")
+if not OCR_API_KEY:
+    raise RuntimeError("OCR_API_KEY not set. Add it to .env or env variables.")
 
 app = FastAPI()
 
@@ -25,6 +37,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+analyze_service = AnalyzeService()
+humanize_service = HumanizeService()
+ocr_service = OCRService()
 from models.gigachat.gigachat import llm
 agent = LLMAgent(
     llm,
@@ -61,6 +77,24 @@ def humanize(humanize_dto: HumanizeDTO):
         previous_rate=humanize_result.previous_ai_rate,
         new_rate=humanize_result.new_ai_rate,
         humanized_text=humanize_result.fixed_text,
+    )
+
+
+ALLOWED_EXTENSIONS = {"png", "jpg", "webp", "pdf"}
+
+
+@app.post(
+    "/ocr",
+    response_model=OCRResponseModel,
+)
+def ocr(file: UploadFile = File(...)):
+    ext = file.filename.split(".")[-1].lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(400, f"Unsupported file type: .{ext}")
+
+    ocr_result = ocr_service.ocr_space_file(file=file, api_key="K81978767588957")
+    return OCRResponseModel(
+        text=ocr_result.text,
     )
 
 

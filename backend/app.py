@@ -4,6 +4,7 @@ import uvicorn
 
 from dtos.analyze import AnalyzeDTO
 from dtos.humanize import HumanizeDTO
+from llm_agent.llm_agent import LLMAgent
 from response_models.analyze import AnalyzeResponseModel, TextChunkResponseModel
 from response_models.humanize import HumanizeResponseModel
 from response_models.ocr import OCRResponseModel
@@ -36,9 +37,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+<<<<<<< HEAD
 analyze_service = AnalyzeService()
 humanize_service = HumanizeService()
 ocr_service = OCRService()
+=======
+from models.gigachat.gigachat import llm
+agent = LLMAgent(
+    llm,
+    tools=[],
+)
+
+analyze_service = AnalyzeService(agent)
+humanize_service = HumanizeService(agent)
+>>>>>>> 1ccb0a484005d96afe0debfe10b4b37002945ea3
 
 
 @app.post(

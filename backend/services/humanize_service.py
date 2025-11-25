@@ -6,11 +6,8 @@ from models.gigachat.gigachat import llm
 
 
 class HumanizeService:
-    def __init__(self) -> None:
-        self.agent = LLMAgent(
-            llm,
-            tools=[],
-        )
+    def __init__(self, agent: LLMAgent) -> None:
+        self.agent = agent
     
     def _get_system_prompt(self) -> str:
         return """
@@ -22,7 +19,8 @@ class HumanizeService:
             3. You are NOT ALLOWED to change the language of the text.
             4. Make the text you are given more similar to a human-written one
             and return the corrected version (<fixed_text>). You must not make any significant changes to the text. The meaning must remain exactly the same. 5. Determine the percentage similarity between the corrected text and the AI-generated text (<new_ai_rate>)
-            5. Return ONLY valid JSON with the following format:
+            5. Memorize the result for the given text. When asked again, return the same result.
+            6. Return ONLY valid JSON with the following format:
 
             {
                 "previous_ai_rate": <previous_ai_rate>,

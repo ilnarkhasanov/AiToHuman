@@ -6,11 +6,8 @@ from llm_agent.llm_agent import LLMAgent
 
 
 class AnalyzeService:
-    def __init__(self) -> None:
-        self.agent = LLMAgent(
-            llm,
-            tools=[],
-        )
+    def __init__(self, agent: LLMAgent) -> None:
+        self.agent = agent
 
     def get_system_prompt(self) -> str:
         return """
@@ -22,7 +19,8 @@ class AnalyzeService:
             - "AI"     : likely written by an AI
             - "HUMAN"  : likely written by a person
             3. Send the AI rate of the text as an integer
-            4. Return ONLY a valid JSON. Format:
+            4. Memorize the result for the given text. When asked again, return the same result.
+            5. Return ONLY a valid JSON. Format:
 
             {
                 "ai_rate": <ai_rate>,

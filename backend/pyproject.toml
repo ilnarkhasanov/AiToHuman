@@ -11,5 +11,6 @@ dependencies = [
     "langgraph>=0.4.3",
     "python-dotenv>=1.2.1",
     "uvicorn>=0.37.0",
-    requests>=2.31.0,
+    "requests>=2.31.0",
+    "python-multipart>=0.0.20",
 ]

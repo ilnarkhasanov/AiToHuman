@@ -1,10 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from dtos.analyze import AnalyzeDTO
 from dtos.humanize import HumanizeDTO
-from dtos.ocr import OCRDTO
+# from dtos.ocr import OCRDTO
 from response_models.analyze import AnalyzeResponseModel, TextChunkResponseModel
 from response_models.humanize import HumanizeResponseModel
 from response_models.ocr import OCRResponseModel
@@ -60,14 +60,20 @@ def humanize(humanize_dto: HumanizeDTO):
         humanized_text=humanize_result.fixed_text,
     )
 
+ALLOWED_EXTENSIONS = {"png", "jpg", "webp", "pdf"}
 @app.post(
     "/ocr",
     response_model=OCRResponseModel,
 )
-def ocr(ocr_dto: OCRDTO):
-    ocr_result = ocr_service.ocr_space_file(ocr_dto.image.filename)
+def ocr(file: UploadFile = File(...)):
+
+    ext = file.filename.split(".")[-1].lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(400, f"Unsupported file type: .{ext}")
+
+    ocr_result = ocr_service.ocr_space_file(file = file)
     return OCRResponseModel(
-        text=ocr_result.text,
+        text = ocr_result.text,
     )
 
 

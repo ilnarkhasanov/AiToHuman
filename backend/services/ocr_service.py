@@ -2,14 +2,26 @@ import json
 from typing import Never
 from entities.ocr_result import OCRResult
 import requests
+from fastapi import UploadFile
+from io import BytesIO
+
+from pathlib import Path
+from dotenv import load_dotenv
+import os
+env_path = Path(__file__).parent / ".env"
+load_dotenv(dotenv_path=env_path)
+
+OCR_API_KEY = os.getenv("OCR_API_KEY")
+if not OCR_API_KEY:
+    raise RuntimeError("OCR_API_KEY not set. Add it to .env or env variables.")
 
 
 class OCRService:
     
-    def ocr_space_file(self, filename, api_key='helloworld', language='eng'):
+    def ocr_space_file(self, file: UploadFile, api_key='', language='eng'):
         """ OCR.space API request with local file.
             Python3.5 - not tested on 2.7
-        :param filename: Your file path & name.
+        :param file: Your file.
         :param api_key: OCR.space API key.
                         Defaults to 'helloworld'.
         :param language: Language code to be used in OCR.
@@ -22,13 +34,12 @@ class OCRService:
                 'apikey': api_key,
                 'language': language,
                 }
-        with open(filename, 'rb') as f:
-            r = requests.post('https://api.ocr.space/parse/image',
-                            files={filename: f},
-                            data=payload,
-                            )
-        return OCRResult(r.content.decode())
+        
+        file_content = file.file.read()
+        files = {'file': file}
 
-
-# Use examples:
-# test_file = ocr_space_file(filename='example_image.png', language='pol')
+        r = requests.post('https://api.ocr.space/parse/image',
+                        files={files},
+                        data=payload,
+                        )
+        return OCRResult(r.json())

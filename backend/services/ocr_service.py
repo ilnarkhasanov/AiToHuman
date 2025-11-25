@@ -1,19 +1,6 @@
-import json
-from typing import Never
 from entities.ocr_result import OCRResult
 import requests
 from fastapi import UploadFile
-from io import BytesIO
-
-from pathlib import Path
-from dotenv import load_dotenv
-import os
-env_path = Path(__file__).parent / ".env"
-load_dotenv(dotenv_path=env_path)
-
-OCR_API_KEY = os.getenv("OCR_API_KEY")
-if not OCR_API_KEY:
-    raise RuntimeError("OCR_API_KEY not set. Add it to .env or env variables.")
 
 
 class OCRService:
@@ -30,16 +17,26 @@ class OCRService:
         :return: Result in JSON format.
         """
 
+        # payload = [('isOverlayRequired', False),
+        #         ('apikey', api_key),
+        #         ('language', language),
+        #         ('filetype', file.content_type)
+        #         ]
         payload = {'isOverlayRequired': False,
                 'apikey': api_key,
                 'language': language,
-                }
-        
-        file_content = file.file.read()
-        files = {'file': file}
+                'filetype': file.content_type.split("/", 1)[1].upper(),
+        }
+        file_content = file.file
+        files = {'file': file_content}
 
         r = requests.post('https://api.ocr.space/parse/image',
-                        files={files},
+                        files=files,
                         data=payload,
-                        )
-        return OCRResult(r.json())
+                        ).json()
+
+        if 'ParsedResults' in r and r['ParsedResults']:
+            parsed_text = '\n'.join([result['ParsedText'] for result in r['ParsedResults'] if result['ParsedText']])
+            return OCRResult(parsed_text)
+        else:
+            return OCRResult("No text found or error in processing")

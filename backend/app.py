@@ -12,6 +12,17 @@ from services.analyze_service import AnalyzeService
 from services.humanize_service import HumanizeService
 from services.ocr_service import OCRService
 
+from pathlib import Path
+from dotenv import load_dotenv
+import os
+env_path = Path(__file__).parent / ".env"
+print(f"Loading environment variables from: {env_path}")
+load_dotenv(dotenv_path=env_path)
+
+OCR_API_KEY = os.getenv("OCR_API_KEY")
+if not OCR_API_KEY:
+    raise RuntimeError("OCR_API_KEY not set. Add it to .env or env variables.")
+
 app = FastAPI()
 
 origins = [
@@ -71,7 +82,7 @@ def ocr(file: UploadFile = File(...)):
     if ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(400, f"Unsupported file type: .{ext}")
 
-    ocr_result = ocr_service.ocr_space_file(file = file)
+    ocr_result = ocr_service.ocr_space_file(file = file, api_key='K81978767588957')
     return OCRResponseModel(
         text = ocr_result.text,
     )

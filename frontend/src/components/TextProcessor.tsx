@@ -120,7 +120,6 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
     onReset();
   };
 
-  // Renders the main input area
   const renderIdleState = () => (
     <div>
       <div className="flex gap-4 items-center justify-between">

@@ -10,7 +10,6 @@ from response_models.ocr import OCRResponseModel
 from services.analyze_service import AnalyzeService
 from services.humanize_service import HumanizeService
 from services.ocr_service import OCRService
-
 from pathlib import Path
 from dotenv import load_dotenv
 import os

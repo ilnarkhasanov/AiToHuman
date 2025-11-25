@@ -21,7 +21,7 @@ const AnalyzeResult: React.FC<AnalyzeResultProps> = ({
     <div>
       <label className="text-sm font-medium text-gray-700">Your Text</label>
       {/* highlighting chunks */}
-      <div className="mt-2 w-full h-64 p-4 border border-gray-200 rounded-md bg-gray-50 overflow-y-auto whitespace-pre-wrap leading-relaxed cursor-default">
+      <div className="mt-2 w-full h-64 p-4 border border-gray-200 rounded-md bg-white overflow-y-auto whitespace-pre-wrap leading-relaxed cursor-default">
         {result.chunks && result.chunks.length > 0 ? (
           result.chunks.map((chunk, index) => (
             <span

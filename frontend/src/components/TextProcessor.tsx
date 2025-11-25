@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, SparklesIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import type {
   AppStatus,
   InternalAnalysisResult,
@@ -58,6 +58,8 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
     }
   });
 
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+
   // Save text to localStorage whenever it changes
   useEffect(() => {
     try {
@@ -115,43 +117,59 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
 
   const renderIdleState = () => (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex gap-4 items-start justify-center">
         <label
           htmlFor="text-input"
-          className="text-sm font-medium text-gray-700"
+          className="text-lg font-medium text-gray-700 py-2"
         >
-          Your Text
+          Type Your Text or
         </label>
         <FileUpload
           onTextExtracted={handleFileExtracted}
+          onFileNameChange={setUploadedFileName}
           maxSizeMB={2}
           disabled={isLoading}
         />
       </div>
-      <textarea
-        id="text-input"
-        className={`
-          mt-2 w-full h-64 p-4 border rounded-md transition focus:outline-none
-          ${
-            isOverLimit
+      <div className="relative">
+        <textarea
+          id="text-input"
+          className={`
+          mt-2 w-full h-64 p-4 border rounded-md transition focus:outline-none bg-gray-50
+          ${isOverLimit
               ? "border-red-500 focus:ring-2 focus:ring-red-300"
               : "border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent"
-          }
+            }
           ${error ? "border-red-500" : ""}
         `}
-        placeholder={`Enter text here (up to ${MAX_WORDS} words)...`}
-        value={text}
-        onChange={handleTextChange}
-        disabled={isLoading}
-      />
-      {/* Word count */}
-      <div
-        className={`text-right text-sm mt-2 ${
-          isOverLimit ? "text-red-600" : "text-gray-500"
-        }`}
-      >
-        {wordCount}/{MAX_WORDS} words
+          placeholder={`Enter text here (up to ${MAX_WORDS} words)...`}
+          value={text}
+          onChange={handleTextChange}
+          disabled={isLoading}
+        />
       </div>
+
+      <div className="flex flex-row justify-between mt-2 items-center gap-2">
+        {uploadedFileName && (
+
+          <div className="min-w-0 flex flex-row items-center gap-2 bg-green-100 text-green-700 text-xs font-semibold py-1.5 px-3 rounded-lg">
+            <InformationCircleIcon className="min-w-4 w-4 h-4" />
+            <span className="truncate" title={uploadedFileName}>
+              {uploadedFileName}
+            </span>
+          </div>
+
+        )}
+        <div className="grow" />
+        <div
+          className={`shrink-0 text-sm ${isOverLimit ? "text-red-600" : "text-gray-500"}`}
+        >
+          {wordCount}/{MAX_WORDS} words
+        </div>
+      </div>
+
+
+
 
       {/* Display API Error Message */}
       {error && (

@@ -145,11 +145,10 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
           id="text-input"
           className={`
           mt-2 w-full h-72 p-4 border rounded-md transition focus:outline-none bg-gray-50
-          ${
-            isOverLimit
+          ${isOverLimit
               ? "border-red-500 focus:ring-2 focus:ring-red-300"
               : "border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent"
-          }
+            }
           ${error ? "border-red-500" : ""}
         `}
           placeholder={`Enter text here (up to ${MAX_WORDS} words)...`}
@@ -170,9 +169,8 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
         )}
         <div className="grow" />
         <div
-          className={`shrink-0 text-sm ${
-            isOverLimit ? "text-red-600" : "text-gray-500"
-          }`}
+          className={`shrink-0 text-sm ${isOverLimit ? "text-red-600" : "text-gray-500"
+            }`}
         >
           {wordCount}/{MAX_WORDS} words
         </div>
@@ -227,6 +225,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
               result={analysisResult}
               onAnalyzeNew={HandleReset}
               onHumanizeExisting={onHumanizeFromAnalysis}
+              onReturnHome={HandleReset}
             />
           );
         }
@@ -238,6 +237,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
             <HumanizerResult
               result={humanizerResult}
               onHumanizeNew={HandleReset}
+              onReturnHome={HandleReset}
             />
           );
         }

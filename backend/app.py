@@ -46,6 +46,7 @@ agent = LLMAgent(
 
 analyze_service = AnalyzeService(agent)
 humanize_service = HumanizeService(agent)
+ocr_service = OCRService()
 
 
 @app.post(

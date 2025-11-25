@@ -4,6 +4,7 @@ import uvicorn
 
 from dtos.analyze import AnalyzeDTO
 from dtos.humanize import HumanizeDTO
+from llm_agent.llm_agent import LLMAgent
 from response_models.analyze import AnalyzeResponseModel, TextChunkResponseModel
 from response_models.humanize import HumanizeResponseModel
 from services.analyze_service import AnalyzeService
@@ -24,8 +25,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-analyze_service = AnalyzeService()
-humanize_service = HumanizeService()
+from models.gigachat.gigachat import llm
+agent = LLMAgent(
+    llm,
+    tools=[],
+)
+
+analyze_service = AnalyzeService(agent)
+humanize_service = HumanizeService(agent)
 
 
 @app.post(

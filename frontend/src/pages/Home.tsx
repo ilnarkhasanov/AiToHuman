@@ -86,14 +86,14 @@ function Home() {
 
   return (
     <main className="w-full max-w-3xl mx-auto min-h-screen py-6">
-      <h1 className="text-center text-3xl sm:text-4xl text-gray-800 pt-6 pb-4 font-lato font-extrabold">
+      <h1 className="text-center text-2xl sm:text-4xl text-gray-800 p-4 font-lato font-extrabold">
         Detect and Humanize AI Text
       </h1>
-      <p className="text-center text-xl text-gray-600 mb-8 font-lato">
+      <p className="text-center text-md sm:text-xl text-gray-600 px-4 mb-6 font-lato">
         Paste your text below to analyze for AI-generated content<br />and
         transform it to a human-like style.
       </p>
-      <div className="bg-gray-100 rounded-2xl p-8">
+      <div className="bg-gray-100 rounded-2xl p-8 shadow-xl/20">
         <TextProcessor
           status={status}
           onAnalyze={handleAnalyze}

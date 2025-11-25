@@ -128,7 +128,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
         >
           Type your text
         </label>
-        <div className="flex items-center gap-4 w-full max-w-sm">
+        <div className="hidden md:flex items-center gap-4 w-full max-w-sm">
           <span className="flex-1 border-t border-gray-300"></span>
           <span className="text-gray-500 text-sm font-medium">OR</span>
           <span className="flex-1 border-t border-gray-300"></span>

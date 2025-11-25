@@ -11,10 +11,9 @@ class HumanizeService:
             llm,
             tools=[],
         )
-
-    def _prepare_prompt(self, text: str) -> str:
-        return (
-            """
+    
+    def _get_system_prompt(self) -> str:
+        return """
             You are an AI text corrector.
 
             Your task:
@@ -36,7 +35,10 @@ class HumanizeService:
             2. You don't output ANYTHING but JSON.
             3. In the JSON, you output ONLY the fields I described above.
             4. The corrected version of the text MUST NOT include your reasoning; it's only the corrected version.            
-            
+        """
+
+    def _prepare_prompt(self, text: str) -> str:
+        return ("""
             Text:
             ----------------
         """
@@ -47,8 +49,9 @@ class HumanizeService:
         )
 
     def humanize(self, text: str) -> HumanizeResult:
+        system_prompt = self._get_system_prompt()
         prompt = self._prepare_prompt(text)
-        raw_result = self.agent.invoke(prompt)
+        raw_result = self.agent.invoke(system_prompt, prompt)
         json_result = json.loads(raw_result)
 
         return HumanizeResult(

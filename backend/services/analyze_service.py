@@ -12,11 +12,16 @@ class AnalyzeService:
             tools=[],
         )
 
+<<<<<<< HEAD
     def prepare_prompt(self, text: str) -> str:
         return (
             """
+=======
+    def get_system_prompt(self) -> str:
+        return """
+>>>>>>> Add system prompt (#27)
             You are an advanced AI-text detector.
-
+            
             TASK:
             1. Split the input text into meaningful segments (usually sentences or short paragraphs).
             2. For EACH segment classify it as:
@@ -38,8 +43,12 @@ class AnalyzeService:
             - Do NOT explain.
             - No additional fields.
             - JSON only.
+        """
 
-            TEXT:
+    def prepare_prompt(self, text: str) -> str:
+        return ("""
+            
+            Analyze the following text and classify each segment as AI-generated or Human-written:
             """
             f"""
             ----------------
@@ -49,8 +58,9 @@ class AnalyzeService:
         )
 
     def analyze(self, text: str) -> AnalyzeResult:
+        system_prompt = self.get_system_prompt()
         prompt = self.prepare_prompt(text)
-        raw_result = self.agent.invoke(prompt)
+        raw_result = self.agent.invoke(system_prompt, prompt)
         json_result = json.loads(raw_result)
 
         result = AnalyzeResult(

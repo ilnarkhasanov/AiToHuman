@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   MagnifyingGlassIcon,
   SparklesIcon,
-  InformationCircleIcon,
+  DocumentIcon,
 } from "@heroicons/react/24/outline";
 import type {
   AppStatus,
@@ -145,10 +145,11 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
           id="text-input"
           className={`
           mt-2 w-full h-72 p-4 border rounded-md transition focus:outline-none bg-gray-50
-          ${isOverLimit
+          ${
+            isOverLimit
               ? "border-red-500 focus:ring-2 focus:ring-red-300"
               : "border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent"
-            }
+          }
           ${error ? "border-red-500" : ""}
         `}
           placeholder={`Enter text here (up to ${MAX_WORDS} words)...`}
@@ -161,7 +162,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
       <div className="flex flex-row justify-between mt-2 items-center gap-2">
         {uploadedFileName && (
           <div className="min-w-0 flex flex-row items-center gap-2 bg-green-100 text-green-700 text-xs font-semibold py-1.5 px-3 rounded-lg">
-            <InformationCircleIcon className="min-w-4 w-4 h-4" />
+            <DocumentIcon className="min-w-4 w-4 h-4" />
             <span className="truncate" title={uploadedFileName}>
               {uploadedFileName}
             </span>
@@ -169,8 +170,9 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
         )}
         <div className="grow" />
         <div
-          className={`shrink-0 text-sm ${isOverLimit ? "text-red-600" : "text-gray-500"
-            }`}
+          className={`shrink-0 text-sm ${
+            isOverLimit ? "text-red-600" : "text-gray-500"
+          }`}
         >
           {wordCount}/{MAX_WORDS} words
         </div>

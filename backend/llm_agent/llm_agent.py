@@ -15,10 +15,9 @@ class LLMAgent:
             tools,
             checkpointer=InMemorySaver(),
         )
-        self.config: RunnableConfig = {
-                "configurable": {"thread_id": uuid4().hex}}
-    
-    def invoke(self, content: str, temperature: float=0.1) -> str:
+        self.config: RunnableConfig = {"configurable": {"thread_id": uuid4().hex}}
+
+    def invoke(self, content: str, temperature: float = 0.1) -> str:
         message = {
             "role": "user",
             "content": content,

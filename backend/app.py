@@ -4,7 +4,6 @@ import uvicorn
 
 from dtos.analyze import AnalyzeDTO
 from dtos.humanize import HumanizeDTO
-# from dtos.ocr import OCRDTO
 from response_models.analyze import AnalyzeResponseModel, TextChunkResponseModel
 from response_models.humanize import HumanizeResponseModel
 from response_models.ocr import OCRResponseModel
@@ -15,8 +14,8 @@ from services.ocr_service import OCRService
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+
 env_path = Path(__file__).parent / ".env"
-print(f"Loading environment variables from: {env_path}")
 load_dotenv(dotenv_path=env_path)
 
 OCR_API_KEY = os.getenv("OCR_API_KEY")
@@ -71,20 +70,22 @@ def humanize(humanize_dto: HumanizeDTO):
         humanized_text=humanize_result.fixed_text,
     )
 
+
 ALLOWED_EXTENSIONS = {"png", "jpg", "webp", "pdf"}
+
+
 @app.post(
     "/ocr",
     response_model=OCRResponseModel,
 )
 def ocr(file: UploadFile = File(...)):
-
     ext = file.filename.split(".")[-1].lower()
     if ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(400, f"Unsupported file type: .{ext}")
 
-    ocr_result = ocr_service.ocr_space_file(file = file, api_key='K81978767588957')
+    ocr_result = ocr_service.ocr_space_file(file=file, api_key="K81978767588957")
     return OCRResponseModel(
-        text = ocr_result.text,
+        text=ocr_result.text,
     )
 
 

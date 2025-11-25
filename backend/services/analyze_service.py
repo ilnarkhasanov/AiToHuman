@@ -2,7 +2,6 @@ import json
 from entities.analyze_result import AnalyzeResult
 from entities.text_chunk import TextChunk
 from models.gigachat.gigachat import llm
-
 from llm_agent.llm_agent import LLMAgent
 
 
@@ -14,7 +13,8 @@ class AnalyzeService:
         )
 
     def prepare_prompt(self, text: str) -> str:
-        return ("""
+        return (
+            """
             You are an advanced AI-text detector.
 
             TASK:
@@ -62,9 +62,7 @@ class AnalyzeService:
             result.chunks.append(
                 TextChunk(
                     text=json_chunk["text"],
-                    ai_generated=(
-                        True if json_chunk["label"] == "AI" else False
-                    )
+                    ai_generated=(True if json_chunk["label"] == "AI" else False),
                 )
             )
 

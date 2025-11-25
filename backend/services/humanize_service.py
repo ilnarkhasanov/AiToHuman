@@ -11,9 +11,10 @@ class HumanizeService:
             llm,
             tools=[],
         )
-    
+
     def _prepare_prompt(self, text: str) -> str:
-        return ("""
+        return (
+            """
             You are an AI text corrector.
 
             Your task:
@@ -39,7 +40,7 @@ class HumanizeService:
             Text:
             ----------------
         """
-        f"""
+            f"""
             {text}
             ----------------
         """
@@ -49,7 +50,7 @@ class HumanizeService:
         prompt = self._prepare_prompt(text)
         raw_result = self.agent.invoke(prompt)
         json_result = json.loads(raw_result)
-        
+
         return HumanizeResult(
             previous_ai_rate=json_result["previous_ai_rate"],
             fixed_text=json_result["fixed_text"],

@@ -59,8 +59,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
         className={`
           relative cursor-pointer 
           bg-purple-100 hover:bg-purple-200 
-          text-purple-700 text-base font-semibold 
-          py-2 px-4 rounded-lg shadow-sm transition-all flex items-center
+          text-purple-700 text-[15px] font-semibold 
+          py-1.5 px-6 rounded-lg shadow-sm transition-all flex items-center
           ${loading || disabled ? "opacity-50 cursor-not-allowed" : ""}
         `}
       >
@@ -70,7 +70,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
             Loading File...
           </div>
         ) : (
-          "Upload File"
+          "Upload file"
         )}
         <input
           ref={inputRef}

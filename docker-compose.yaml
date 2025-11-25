@@ -11,3 +11,13 @@ services:
     build: frontend
     ports:
       - 5173:80
+
+  redis:
+    image: redis:7
+    container_name: redis
+    command:
+      - /bin/sh
+      - -c
+      - redis-server
+    ports:
+      - 6379:6379

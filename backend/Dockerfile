@@ -14,5 +14,6 @@ COPY llm_agent /application/llm_agent
 COPY models /application/models
 COPY response_models /application/response_models
 COPY services /application/services
+COPY redis_client /application/redis_client
 
 CMD ["uv", "run", "app.py"]

@@ -3,6 +3,7 @@ from entities.analyze_result import AnalyzeResult
 from entities.text_chunk import TextChunk
 from models.gigachat.gigachat import llm
 from llm_agent.llm_agent import LLMAgent
+from redis_client.client import redis_client
 
 
 class AnalyzeService:
@@ -50,9 +51,16 @@ class AnalyzeService:
         )
 
     def analyze(self, text: str) -> AnalyzeResult:
-        system_prompt = self.get_system_prompt()
-        prompt = self.prepare_prompt(text)
-        raw_result = self.agent.invoke(system_prompt, prompt)
+        maybe_value: bytes | None = redis_client.get(text)  # type: ignore
+
+        if maybe_value is not None:
+            raw_result = maybe_value.decode("utf-8")
+        else:
+            system_prompt = self.get_system_prompt()
+            prompt = self.prepare_prompt(text)
+            raw_result = self.agent.invoke(system_prompt, prompt)
+            redis_client.set(text, raw_result, ex=300)
+
         json_result = json.loads(raw_result)
 
         result = AnalyzeResult(

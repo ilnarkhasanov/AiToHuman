@@ -63,6 +63,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
   });
 
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+  const [fileUploadError, setFileUploadError] = useState<string | null>(null);
 
   // Save text to localStorage whenever it changes
   useEffect(() => {
@@ -103,6 +104,11 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
     setText(fileText);
     const words = fileText.split(/\s+/).filter(Boolean);
     setWordCount(words.length);
+    setFileUploadError(null); // Clear error on successful extraction
+  };
+
+  const handleFileUploadError = (error: string | null) => {
+    setFileUploadError(error);
   };
 
   const HandleReset = () => {
@@ -116,6 +122,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
     setText("");
     setWordCount(0);
     setUploadedFileName("");
+    setFileUploadError(null);
 
     onReset();
   };
@@ -137,6 +144,7 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
         <FileUpload
           onTextExtracted={handleFileExtracted}
           onFileNameChange={setUploadedFileName}
+          onError={handleFileUploadError}
           maxSizeMB={2}
           disabled={isLoading}
         />
@@ -146,12 +154,11 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
           id="text-input"
           className={`
           mt-2 w-full h-72 p-4 border rounded-md transition focus:outline-none bg-gray-50
-          ${
-            isOverLimit
+          ${isOverLimit
               ? "border-red-500 focus:ring-2 focus:ring-red-300"
               : "border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent"
-          }
-          ${error ? "border-red-500" : ""}
+            }
+          ${error || fileUploadError ? "border-red-500" : ""}
         `}
           placeholder={`Enter text here (up to ${MAX_WORDS} words)...`}
           value={text}
@@ -171,18 +178,17 @@ const TextProcessor: React.FC<TextProcessorProps> = ({
         )}
         <div className="grow" />
         <div
-          className={`shrink-0 text-sm ${
-            isOverLimit ? "text-red-600" : "text-gray-500"
-          }`}
+          className={`shrink-0 text-sm ${isOverLimit ? "text-red-600" : "text-gray-500"
+            }`}
         >
           {wordCount}/{MAX_WORDS} words
         </div>
       </div>
 
-      {/* Display API Error Message */}
-      {error && (
+      {/* Display API Error Message or File Upload Error */}
+      {(error || fileUploadError) && (
         <div className="text-left text-sm text-red-600 mt-2 p-3 bg-red-50 rounded-md">
-          <strong>Error:</strong> {error}
+          <strong>Error:</strong> {error || fileUploadError}
         </div>
       )}
 

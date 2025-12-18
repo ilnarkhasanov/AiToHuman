@@ -31,3 +31,7 @@ export interface InternalHumanizerResult {
   humanizedScore: number;
   humanizedText: string;
 }
+
+export interface ApiOCRResult {
+  text: string;
+}

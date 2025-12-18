@@ -1,52 +1,89 @@
 import React, { useRef, useState } from "react";
-import pdfToText from "react-pdftotext";
+import { extractTextFromFile } from "../Api/FileOCR";
 
 interface FileUploadProps {
   onTextExtracted: (text: string) => void;
   onFileNameChange?: (fileName: string | null) => void;
+  onError?: (error: string | null) => void;
   maxSizeMB?: number;
   disabled?: boolean;
 }
 
 const MAX_SIZE_MB = 2;
-const SUPPORTED_TYPES = ["text/plain", "application/pdf"];
+const TEXT_FILE_TYPE = "text/plain";
+const TEXT_EXTENSIONS = [".txt"];
+const OCR_FILE_TYPES = [
+  "application/pdf",
+  "image/png",
+  "image/jpeg",
+  "image/jpg",
+];
+const OCR_EXTENSIONS = [".pdf", ".png", ".jpg", ".jpeg"];
+const SUPPORTED_TYPES = [TEXT_FILE_TYPE, ...OCR_FILE_TYPES];
+
+const getFileExtension = (fileName: string): string => {
+  const lastDot = fileName.lastIndexOf(".");
+  return lastDot !== -1 ? fileName.substring(lastDot).toLowerCase() : "";
+};
 
 const FileUpload: React.FC<FileUploadProps> = ({
   onTextExtracted,
   onFileNameChange,
+  onError,
   maxSizeMB = MAX_SIZE_MB,
   disabled = false,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
-    setError(null);
+    onError?.(null);
     onFileNameChange?.(null);
     if (!file) return;
 
-    if (!SUPPORTED_TYPES.includes(file.type)) {
-      setError("Only .txt and .pdf files are supported");
+    // Check file type (by MIME type and extension for robustness)
+    const fileExtension = getFileExtension(file.name);
+    const isValidByMimeType = SUPPORTED_TYPES.includes(file.type);
+    const isValidByExtension =
+      TEXT_EXTENSIONS.includes(fileExtension) ||
+      OCR_EXTENSIONS.includes(fileExtension);
+
+    if (!isValidByMimeType && !isValidByExtension) {
+      onError?.("Only .txt, .pdf, .png, and .jpg files are supported");
       return;
     }
     if (file.size > maxSizeMB * 1024 * 1024) {
-      setError(`File too large (max ${maxSizeMB}MB)`);
+      onError?.(`File too large (max ${maxSizeMB}MB)`);
       return;
     }
     setLoading(true);
     try {
       let extracted = "";
-      if (file.type === "text/plain") {
+      const isTextFile =
+        file.type === TEXT_FILE_TYPE || TEXT_EXTENSIONS.includes(fileExtension);
+      const isOCRFile =
+        OCR_FILE_TYPES.includes(file.type) ||
+        OCR_EXTENSIONS.includes(fileExtension);
+
+      if (isTextFile) {
         extracted = await file.text();
-      } else if (file.type === "application/pdf") {
-        extracted = await pdfToText(file);
+      } else if (isOCRFile) {
+        console.log("extracting text OCR")
+        extracted = await extractTextFromFile(file);
+      } else {
+        throw new Error("Unsupported file type");
       }
       onTextExtracted(extracted);
       onFileNameChange?.(file.name);
+      onError?.(null); // Clear any previous errors on success
     } catch (err) {
-      setError("Failed to extract text");
+      console.error("Error extracting text:", err);
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Failed to extract text from file";
+      onError?.(errorMessage);
     } finally {
       setLoading(false);
       if (inputRef.current) inputRef.current.value = "";
@@ -75,17 +112,15 @@ const FileUpload: React.FC<FileUploadProps> = ({
         <input
           ref={inputRef}
           type="file"
-          accept=".txt, .pdf"
+          accept=".txt,.pdf,.png,.jpg,.jpeg"
           className="sr-only"
           onChange={handleFileChange}
           disabled={loading || disabled}
         />
       </label>
       <div className="text-xs text-gray-500 mt-1 text-right">
-        txt, pdf. Size limit: {maxSizeMB}MB
+        txt, pdf, png, jpg. Size limit: {maxSizeMB}MB
       </div>
-      {error && <div className="text-red-600 mt-2 text-sm">{error}</div>}
-
     </div>
   );
 };

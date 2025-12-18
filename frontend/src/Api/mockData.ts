@@ -60,3 +60,18 @@ export const mockHumanizeText = (text: string): Promise<ApiHumanizerResult> => {
     }, 1000);
   });
 };
+
+
+/**
+ * MOCK: Simulates the /ocr endpoint delay.
+ */
+export const mockExtractTextFromFile = (file: File): Promise<string> => {
+  console.log(
+    `[MOCK API] Simulating OCR extraction for file: "${file.name}"`
+  );
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("This is mock extracted text from the uploaded file. In a real scenario, this would be the text extracted via OCR from your PDF, PNG, or JPG file.");
+    }, 1500);
+  });
+};
